@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nocturne - Sklep Internetowy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark-background: #121212;
+            --dark-surface: #1E1E1E;
+            --text-light: #E0E0E0;
+            --text-lighter: #F5F5F5;
+            --accent-color: #BB86FC; /* Fioletowy akcent */
+            --accent-light: #DAA5FF;
+            --border-color: #333333;
+            --button-hover: #9E7BCC;
+            --card-shadow: rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--dark-background);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden; /* Zapobiega poziomemu przewijaniu */
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent-light);
+        }
+
+        /* --- Nagłówek --- */
+        header {
+            background-color: var(--dark-surface);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px var(--card-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-lighter);
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 2rem;
+        }
+
+        nav ul li a {
+            color: var(--text-light);
+            font-weight: 400;
+            font-size: 1.1rem;
+            position: relative;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .header-icons a {
+            margin-left: 1.5rem;
+            font-size: 1.4rem;
+            color: var(--text-light);
+        }
+
+        /* --- Sekcja Hero --- */
+        .hero {
+            position: relative;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.9));
+            z-index: 1;
+        }
+
+        .hero video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            filter: brightness(0.6); /* Przyciemnienie wideo */
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: var(--text-lighter);
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-content p {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        .btn {
+            background-color: var(--accent-color);
+            color: var(--dark-background);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-3px);
+        }
+
+        /* --- Sekcje Produktowe/Kategorie --- */
+        .section {
+            padding: 5rem 5%;
+            text-align: center;
+        }
+
+        .section h2 {
+            font-size: 2.8rem;
+            color: var(--text-lighter);
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 3px;
+            background: var(--accent-color);
+            bottom: -10px;
+            left: 15%;
+            border-radius: 2px;
+        }
+
+        .product-grid, .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card, .category-card {
+            background-color: var(--dark-surface);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover, .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        .product-card img, .category-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover img, .category-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .product-info, .category-info {
+            padding: 1.5rem;
+            text-align: left;
+        }
+
+        .product-info h3, .category-info h3 {
+            font-size: 1.6rem;
+            margin-top: 0;
+            margin-bottom: 0.8rem;
+            color: var(--text-lighter);
+        }
+
+        .product-info p {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .add-to-cart {
+            background-color: var(--accent-color);
+            color: var(--dark-background);
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            background-color: var(--button-hover);
+        }
+
+        /* --- Sekcja O Nas / Trust --- */
+        .about-us, .testimonials {
+            background-color: var(--dark-surface);
+            padding: 5rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .about-us p {
+            max-width: 900px;
+            margin: 0 auto 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--text-light);
+        }
+
+        .testimonial-card {
+            background-color: var(--dark-background);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px var(--card-shadow);
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .testimonial-card p {
+            font-style: italic;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            color: var(--text-light);
+        }
+
+        .testimonial-card span {
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        /* --- Stopka --- */
+        footer {
+            background-color: var(--dark-background);
+            color: var(--text-light);
+            padding: 3rem 5%;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-column h4 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-lighter);
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-column ul li a {
+            color: var(--text-light);
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--accent-color);
+        }
+
+        .social-icons a {
+            font-size: 1.8rem;
+            margin-right: 1rem;
+            color: var(--text-light);
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent-color);
+        }
+
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .newsletter-form input[type="email"] {
+            background-color: var(--dark-surface);
+            border: 1px solid var(--border-color);
+            padding: 0.8rem;
+            border-radius: 5px;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .newsletter-form input[type="email"]::placeholder {
+            color: #777;
+        }
+
+        .newsletter-form button {
+            background-color: var(--accent-color);
+            color: var(--dark-background);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            background-color: var(--button-hover);
+        }
+
+        .copyright {
+            width: 100%;
+            text-align: center;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        /* --- Responsywność --- */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem 3%;
+            }
+
+            nav ul {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 0.5rem 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+
+            .section h2 {
+                font-size: 2.2rem;
+            }
+
+            .product-grid, .category-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-column {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            nav ul li {
+                margin: 0.3rem 0.8rem;
+            }
+
+            .header-icons a {
+                margin-left: 1rem;
+                font-size: 1.2rem;
+            }
+
+            .hero {
+                height: 60vh;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 0.8rem 2rem;
+                font-size: 1rem;
+            }
+
+            .section {
+                padding: 3rem 3%;
+            }
+
+            .section h2 {
+                font-size: 1.8rem;
+                margin-bottom: 2rem;
+            }
+
+            .product-info h3, .category-info h3 {
+                font-size: 1.4rem;
+            }
+
+            .price {
+                font-size: 1.5rem;
+            }
+
+            .add-to-cart {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            footer {
+                padding: 2rem 3%;
+            }
+
+            .footer-column h4 {
+                font-size: 1.2rem;
+            }
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Nocturne</div>
+        <nav>
+            <ul>
+                <li><a href="#">Nowości</a></li>
+                <li><a href="#">Kategorie</a></li>
+                <li><a href="#">Promocje</a></li>
+                <li><a href="#">O Nas</a></li>
+                <li><a href="#">Kontakt</a></li>
+            </ul>
+        </nav>
+        <div class="header-icons">
+            <a href="#" aria-label="Szukaj"><i class="fas fa-search"></i></a>
+            <a href="#" aria-label="Koszyk"><i class="fas fa-shopping-cart"></i></a>
+            <a href="#" aria-label="Konto użytkownika"><i class="fas fa-user"></i></a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <video autoplay muted loop playsinline>
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-abstract-shape-floating-through-the-air-1361-large.mp4" type="video/mp4">
+                Twoja przeglądarka nie obsługuje tagu wideo.
+            </video>
+            <div class="hero-content">
+                <h1>Odkryj Świat Nowoczesności</h1>
+                <p>Ekskluzywne produkty, które definiują przyszłość Twojego stylu i technologii. Zanurz się w ciemności elegancji.</p>
+                <a href="#" class="btn">Przeglądaj Kolekcję</a>
+            </div>
+        </section>
+
+        <section class="section" id="featured-products">
+            <h2>Wyróżnione Produkty</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <img src="sklep-zdj/sluchawki.webp" alt="Nowoczesne Słuchawki">
+                    <div class="product-info">
+                        <h3>Nowoczesne Słuchawki</h3>
+                        <p>Krystalicznie czysty dźwięk, design premium i niezrównany komfort. Idealne dla audiofilów.</p>
+                        <div class="price">499 zł</div>
+                        <a href="#" class="add-to-cart">Dodaj do koszyka</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="sklep-zdj/zegarek.webp" alt="Smartwatch 'Fusion'">
+                    <div class="product-info">
+                        <h3>Smartwatch "Fusion"</h3>
+                        <p>Połącz styl z funkcjonalnością. Śledź aktywność, odbieraj powiadomienia, bądź na bieżąco.</p>
+                        <div class="price">799 zł</div>
+                        <a href="#" class="add-to-cart">Dodaj do koszyka</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="sklep-zdj/led.webp" alt="Minimalistyczna Lampa LED">
+                    <div class="product-info">
+                        <h3>Minimalistyczna Lampa LED</h3>
+                        <p>Oświetl swoją przestrzeń z elegancją. Energooszczędna, z regulacją barwy światła.</p>
+                        <div class="price">249 zł</div>
+                        <a href="#" class="add-to-cart">Dodaj do koszyka</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="categories">
+            <h2>Przeglądaj Kategorie</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <img src="sklep-zdj/elektronika.webp" alt="Elektronika">
+                    <div class="category-info">
+                        <h3>Elektronika</h3>
+                        <p>Najnowsze gadżety i urządzenia.</p>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <img src="sklep-zdj/akcesoria.webp" alt="Akcesoria">
+                    <div class="category-info">
+                        <h3>Akcesoria</h3>
+                        <p>Uzupełnij swój styl.</p>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <img src="sklep-zdj/smart.webp" alt="Smart Home">
+                    <div class="category-info">
+                        <h3>Smart Home</h3>
+                        <p>Inteligentne rozwiązania dla Twojego domu.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-us">
+            <h2>Nasza Misja</h2>
+            <p>W "Nocturne" wierzymy, że nowoczesność to nie tylko technologia, ale styl życia. Starannie selekcjonujemy produkty, które łączą w sobie innowację, wyrafinowany design i najwyższą jakość. Naszym celem jest dostarczanie Ci unikalnych przedmiotów, które wzbogacą Twoje codzienne doświadczenia i podkreślą indywidualny charakter.</p>
+        </section>
+
+        <section class="section testimonials">
+            <h2>Co mówią Nasi Klienci</h2>
+            <div class="testimonial-card">
+                <p>"Absolutnie zachwycony jakością i designem produktów z Nocturne! Przesyłka dotarła szybko i w eleganckim opakowaniu. Zdecydowanie polecam!"</p>
+                <span>- Anna K., Warszawa</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"W końcu sklep, który rozumie potrzeby nowoczesnego klienta. Prosta nawigacja, piękne produkty i świetna obsługa klienta. Wrócę na pewno!"</p>
+                <span>- Piotr G., Kraków</span>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-column">
+            <h4>Nocturne</h4>
+            <p>Odkryj przyszłość z nami. Innowacja, design, jakość.</p>
+            <div class="social-icons">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h4>Szybkie Linki</h4>
+            <ul>
+                <li><a href="#">Moje Konto</a></li>
+                <li><a href="#">Status Zamówienia</a></li>
+                <li><a href="#">Wysyłka i Zwroty</a></li>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Polityka Prywatności</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Kontakt</h4>
+            <ul>
+                <li>Email: <a href="mailto:info@nocturne.com">info@nocturne.com</a></li>
+                <li>Telefon: <a href="tel:+48123456789">+48 123 456 789</a></li>
+                <li>Adres: Ul. Nowoczesna 1, 00-001 Warszawa</li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Newsletter</h4>
+            <p>Zapisz się, aby otrzymywać najnowsze oferty i nowości.</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Twój adres email" required>
+                <button type="submit">Zapisz się</button>
+            </form>
+        </div>
+        <div class="copyright">
+            &copy; 2025 Nocturne. Wszelkie prawa zastrzeżone.
+        </div>
+    </footer>
+</body>
+</html>
